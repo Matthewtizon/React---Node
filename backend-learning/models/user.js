@@ -1,10 +1,11 @@
 // user model
 
-function createUser(name, age) {
+function createUserModel(name, age) {
     return {
+        id: Date.now().toString(),
         name,
         age
     };
 }
 
-module.exports = { createUser };
+module.exports = { createUserModel };
