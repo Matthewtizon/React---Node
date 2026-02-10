@@ -3,7 +3,6 @@ const router = express.Router();
 
 // Import business logic
 const {
-    hasAccess,
     addUser,
     getAllUsers,
     updateUser,
