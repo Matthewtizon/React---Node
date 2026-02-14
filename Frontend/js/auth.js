@@ -37,27 +37,29 @@ if (registerForm) {
     });
 }
 
-const loginForm = document.getElementById('loginForm');
+const loginForm = document.getElementById("loginform");
 
 if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value.trim();
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
 
-        const users = getUsers();
+    const users = getUsers();
 
-        const validUser = users.find(user => user.email === email && user.password === password)
+    const validUser = users.find(
+      user => user.email === email && user.password === password
+    );
 
-        if (!validUser) {
-            alert("Invalid Credentials");
-            return;
-        }
+    if (!validUser) {
+      alert("Invalid credentials.");
+      return;
+    }
 
-        localStorage.setItem("currentUser", JSON.stringify(validUser));
+    localStorage.setItem("currentUser", JSON.stringify(validUser));
 
-        alert("Successful Login... redirecting");
-        window.location.href = 'dashboard.html';
-    });
+    alert("Login successful!");
+    window.location.href = "Dashboard.html";
+  });
 }
