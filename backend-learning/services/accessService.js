@@ -1,5 +1,9 @@
 // In-memory data store (temporary, will be replaced by DB in Day 6)
-const users = [];
+//const users = [];
+
+
+// connect to database 
+const pool = require('../db/index');
 
 /*
   Checks if a user is allowed access.
@@ -22,7 +26,8 @@ async function hasAccess(user) {
   - Very important backend habit
 */
 async function getAllUsers() {
-    return [...users];
+    const result = await pool.query('SELECT * FROM users');
+    return result.rows;
 }
 
 /*
@@ -40,9 +45,14 @@ async function addUser(user) {
         return false;
     }
 
-    // Persist user
-    users.push(user);
-    return true;
+    const query = `
+    INSERT INTO users (name, age)
+    VALUES ($1, $2)
+    RETURNING *
+    `;
+    
+    const result = await pool.query(query, [user.name, user.age]);
+    return result.rows[0];
 }
 
 /*
@@ -51,24 +61,38 @@ async function addUser(user) {
   - updates is a PARTIAL object { name?, age? }
 */
 async function updateUser(id, updates) {
-    // Find user by ID
-    const user = users.find(u => u.id === id);
-
-    // If user does not exist
-    if (!user) {
-        return false;
-    }
-
-    // Update allowed fields only
+    const field = [];
+    const values = [];
+    let index = 1;
+    
+     // Update allowed fields only
     if (typeof updates.name === 'string' && updates.name.trim() !== '') {
-        user.name = updates.name;
+        field.push(`name = $${index}`);
+        values.push(updates.name);
+        index++;
     }
 
     if (typeof updates.age === 'number' && updates.age > 0) {
-        user.age = updates.age;
+        field.push(`age = $${index}`);
+        values.push(updates.age);
+        index++
     }
 
-    return true;
+    if (field.length === 0) {
+        return false;
+    }
+
+    values.push(id)
+
+    const query = `
+    UPDATE users
+    SET ${field.join(', ')}
+    WHERE id = $${index}
+    `;
+
+    const result = await pool.query(query, values)
+
+    return result.rowCount > 0;
 }
 
 /*
@@ -77,15 +101,13 @@ async function updateUser(id, updates) {
   - Removes exactly one user
 */
 async function deleteUser(id) {
-    const index = users.findIndex(u => u.id === id);
-
-    // If user not found
-    if (index === -1) {
-        return false;
-    }
-
-    users.splice(index, 1);
-    return true;
+    const query = `
+        DELETE FROM users
+        WHERE id = $1
+    `;
+    
+    const result = await pool.query(query, [id]);
+    return result.rowCount > 0;
 }
 
 // Export service functions
