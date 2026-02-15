@@ -50,3 +50,15 @@ body{
     margin-top: 1rem;
     color: white;
 }
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    display: block;
+}
+
+input.error {
+    border: 1px solid red;
+}
+
