@@ -1,11 +1,14 @@
+
 const navLinks = document.getElementById("navLinks");
 const current = JSON.parse(localStorage.getItem("currentUser"));
 
-if (!navLinks) return;
+
+
 
 if (current) {
+    
     navLinks.innerHTML = `
-    <a href="Dashboard.html">Dashboard</a>
+    <button type="reset" id="logoutBtn" >Logout</button>
     `
 } else {
     navLinks.innerHTML = `
@@ -13,3 +16,11 @@ if (current) {
     <a href="registration.html" class="btn-primary">Register</a>
     `
 }
+
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", function () {
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+})

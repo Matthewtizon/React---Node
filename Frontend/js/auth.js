@@ -1,5 +1,3 @@
-showFlashMesage();
-
 // Utility: Get users from storage
 function getUsers() {
     return JSON.parse(localStorage.getItem("users")) || [];
@@ -127,7 +125,6 @@ if (loginForm) {
 
     localStorage.setItem("currentUser", JSON.stringify(validUser));
 
-    setFlashMessage("Login successful!");
     window.location.href = "Dashboard.html";
   });
 }
