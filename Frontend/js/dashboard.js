@@ -9,3 +9,8 @@ logoutBtn.addEventListener("click", function () {
     localStorage.removeItem("currentUser");
     window.location.href = "login.html";
 })
+
+if (user.role === "admin") {
+    document.getElementById("adminPanel").style.display = "block";
+}
+
